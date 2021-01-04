@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:potres2020v2/Views/add_post_age.dart';
+import 'package:potres2020v2/Views/add_post_page.dart';
 import 'package:potres2020v2/Views/home_page.dart';
 import 'package:potres2020v2/Views/splash_page.dart';
 

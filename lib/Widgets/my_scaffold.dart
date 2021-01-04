@@ -42,7 +42,7 @@ class MyScaffold extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
               break;
             case 1:
-              Navigator.pushNamed(context, '/input');
+              Navigator.pushNamedAndRemoveUntil(context, '/input', (route) => false);
               break;
             default:
               Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
