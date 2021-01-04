@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:potres2020v2/Views/addPostPage.dart';
-import 'package:potres2020v2/Views/homePage.dart';
-import 'package:potres2020v2/Views/splashPage.dart';
+import 'package:potres2020v2/Views/add_post_age.dart';
+import 'package:potres2020v2/Views/home_page.dart';
+import 'package:potres2020v2/Views/splash_page.dart';
 
 Route<dynamic> route(StatefulWidget page, {RouteSettings settings}) {
   return PageRouteBuilder(transitionDuration: Duration.zero, pageBuilder: (context, animation, animation2) => page, settings: settings);

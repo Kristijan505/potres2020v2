@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:potres2020v2/Models/post.dart';
-import 'package:potres2020v2/Widgets/myScaffold.dart';
+import 'package:potres2020v2/Widgets/my_scaffold.dart';
 
 class HomePage extends StatefulWidget {
   @override
