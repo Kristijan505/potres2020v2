@@ -42,7 +42,10 @@ class MyScaffold extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
               break;
             case 1:
-              Navigator.pushNamed(context, '/input');
+              Navigator.pushNamedAndRemoveUntil(context, '/input', (route) => false);
+              break;
+            case 2:
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
               break;
             default:
               Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
@@ -52,3 +55,19 @@ class MyScaffold extends StatelessWidget {
     );
   }
 }
+
+List<BottomNavigationBarItem> bottomItems = <BottomNavigationBarItem>[
+  BottomNavigationBarItem(
+    icon: Icon(Icons.home),
+    label: 'Početna',
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(Icons.add_box),
+    label: 'Unos',
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(Icons.login),
+    label: 'Prijava',
+  ),
+];
+

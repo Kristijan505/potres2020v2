@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:potres2020v2/Widgets/myScaffold.dart';
+import 'package:potres2020v2/Widgets/my_scaffold.dart';
 
 class AddPostPage extends StatefulWidget {
   @override

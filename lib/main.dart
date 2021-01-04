@@ -31,15 +31,4 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-List<BottomNavigationBarItem> bottomItems = <BottomNavigationBarItem>[
-  BottomNavigationBarItem(
-    icon: Icon(Icons.home),
-    label: 'Početna',
-  ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.input),
-    label: 'Unos',
-  ),
-];
-
 Timer timerFetch;
