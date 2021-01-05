@@ -23,73 +23,121 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MyScaffold(
       children: <Widget>[
-        Container(height: 20),
+        Container(height: 16),
         FutureBuilder<Box>(
           future: Hive.openBox('posts'),
           builder: (context, box) {
-            if (!(box.hasData && box.connectionState == ConnectionState.done)) return Center(child: CircularProgressIndicator());
-            return Column(
-              children: <Widget>[
-                Table(
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: <TableRow>[
-                    TableRow(children: <Widget>[
-                      Container(padding: EdgeInsets.all(2), child: Text('Naslov')),
-                      Container(padding: EdgeInsets.all(2), child: Text('Opis')),
-                      Container(padding: EdgeInsets.all(2), child: Text('Kontakt')),
-                    ]),
-                    ...box.data.values
-                        .where((element) => element.runtimeType == Post)
-                        .skip(activePage * itemsPerPage)
-                        .take(itemsPerPage)
-                        .toList()
-                        .map((e) => TableRow(children: <Widget>[
-                              Container(padding: EdgeInsets.all(2), child: Text((e.title.length > 30) ? ('${e.title.substring(0, 30)}...') : e.title)),
-                              Container(padding: EdgeInsets.all(2), child: Text((e.content.length > 30) ? ('${e.content.substring(0, 30)}...') : e.content)),
-                              Container(padding: EdgeInsets.all(2), child: Text(e.contact ?? '')),
-                            ]))
-                        .toList(),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.first_page),
-                      onPressed: () => setState(() => activePage = 0),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.navigate_before),
-                      onPressed: () {
-                        if (activePage > 0) {
-                          setState(() => activePage--);
-                        }
-                      },
-                    ),
-                    Text('${activePage + 1}'),
-                    IconButton(
-                      icon: Icon(Icons.navigate_next),
-                      onPressed: () {
-                        var lastPage = (box.data.values.length ~/ itemsPerPage);
-                        if (activePage != lastPage) {
-                          setState(() => activePage++);
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.last_page),
-                      onPressed: () {
-                        var lastPage = (box.data.values.length ~/ itemsPerPage);
-                        setState(() => activePage = lastPage);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+            if (!(box.hasData && box.connectionState == ConnectionState.done))
+              return Center(child: CircularProgressIndicator());
+            return GestureDetector(
+              onHorizontalDragEnd: (dragEndDetails) {
+                if (dragEndDetails.primaryVelocity < 0) {
+                  goForward(box);
+                } else if (dragEndDetails.primaryVelocity > 0) {
+                  goBack();
+                }
+              },
+              child: Column(
+                children: <Widget>[
+                  ...box.data.values
+                      .where((element) => element.runtimeType == Post)
+                      .skip(activePage * itemsPerPage)
+                      .take(itemsPerPage)
+                      .toList()
+                      .map((e) {
+                    return _PostItem(post: e);
+                  }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.first_page),
+                        onPressed: () => setState(() => activePage = 0),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.navigate_before),
+                        onPressed: () {
+                          goBack();
+                        },
+                      ),
+                      Text('${activePage + 1}'),
+                      IconButton(
+                        icon: Icon(Icons.navigate_next),
+                        onPressed: () {
+                          goForward(box);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.last_page),
+                        onPressed: () {
+                          var lastPage = (box.data.values.length ~/ itemsPerPage);
+                          setState(() => activePage = lastPage);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           },
         ),
       ],
+    );
+  }
+
+  void goBack() {
+    if (activePage > 0) {
+      setState(() => activePage--);
+    }
+  }
+
+  void goForward(AsyncSnapshot<Box> box) {
+    var lastPage = (box.data.values.length ~/ itemsPerPage);
+    if (activePage != lastPage) {
+      setState(() => activePage++);
+    }
+  }
+  
+  
+}
+
+class _PostItem extends StatelessWidget {
+  const _PostItem({Key key, this.post}) : super(key: key);
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = (post.content.length > 40) ? ('${post.content.substring(0, 45)}...') : post.content;
+    return Card(
+      elevation: 1,
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(post.title, style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(content),
+            if (post.contact != null && post.contact.isNotEmpty)
+              Row(children: [
+                Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black26
+                  ),
+                  child: Icon(Icons.phone, color: Colors.white, size: 16,),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(post.contact),
+                )
+              ])
+          ],
+        ),
+      ),
     );
   }
 }
