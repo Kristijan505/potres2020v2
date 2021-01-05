@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:potres2020v2/Models/tag.dart';
+import 'package:potres2020v2/constants.dart';
 
 part 'post.g.dart';
 
@@ -95,7 +96,7 @@ class Post {
   static Future<List<Post>> fetchNew(DateTime dateTimeTo) async {
     var boxDateTimes = await Hive.openBox('dateTimes');
     var dateTimeFrom = boxDateTimes.get('createdAfter', defaultValue: DateTime(1980)) as DateTime;
-    var newPostsResponse = await http.get('https://potres2020.openit.hr/api/v3/posts?created_before=$dateTimeTo&created_after=$dateTimeFrom').timeout(Duration(seconds: 5), onTimeout: () => http.Response('', 400));
+    var newPostsResponse = await http.get('$baseUrl/api/v3/posts?created_before=$dateTimeTo&created_after=$dateTimeFrom').timeout(Duration(seconds: 5), onTimeout: () => http.Response('', 400));
     if (newPostsResponse.statusCode != 200) {
       return <Post>[];
     }
@@ -105,7 +106,7 @@ class Post {
   static Future<List<Post>> fetchUpdated(DateTime dateTimeTo) async {
     var boxDateTimes = await Hive.openBox('dateTimes');
     var dateTimeFrom = boxDateTimes.get('updatedAfter', defaultValue: DateTime(1980)) as DateTime;
-    var updatedPostsResponse = await http.get('https://potres2020.openit.hr/api/v3/posts?updated_before=$dateTimeTo&updated_after=$dateTimeFrom').timeout(Duration(seconds: 5), onTimeout: () => http.Response('', 400));
+    var updatedPostsResponse = await http.get('$baseUrl/api/v3/posts?updated_before=$dateTimeTo&updated_after=$dateTimeFrom').timeout(Duration(seconds: 5), onTimeout: () => http.Response('', 400));
     if (updatedPostsResponse.statusCode != 200) {
       return <Post>[];
     }
