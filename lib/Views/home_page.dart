@@ -108,7 +108,7 @@ class _PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = (post.content.length > 40) ? ('${post.content.substring(0, 45)}...') : post.content;
+    final content = (post.content.length > 45) ? ('${post.content.substring(0, 45)}...') : post.content;
     return Card(
       elevation: 1,
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
