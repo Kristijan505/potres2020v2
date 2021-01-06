@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:potres2020v2/main.dart';
 
 class MyScaffold extends StatelessWidget {
   final String title;

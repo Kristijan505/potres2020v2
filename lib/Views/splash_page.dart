@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:potres2020v2/Models/post.dart';
 import 'package:potres2020v2/Models/tag.dart';
 import 'package:potres2020v2/main.dart';
@@ -31,24 +32,21 @@ class _SplashPageState extends State<SplashPage> {
     if (!isOpenedUnsentPosts) await Hive.openBox('unsentPosts');
     var isOpenedDateTimes = await Hive.boxExists('dateTimes');
     if (!isOpenedDateTimes) await Hive.openBox('dateTimes');
+    Tag.save(Tag.fetch());
     timerFetch = Timer.periodic(Duration(seconds: 15), (timer) async {
-      var dateTimeTo = DateTime.now();
       var boxPosts = await Hive.openBox('posts');
-      var boxDateTimes = await Hive.openBox('dateTimes');
-      var newPosts = await Post.fetchNew(dateTimeTo);
+      var newPosts = await Post.fetchNew();
       if (newPosts.isNotEmpty) {
         for (var newPost in newPosts) {
           await boxPosts.put(newPost.id, newPost);
         }
       }
-      await boxDateTimes.put('createdAfter', dateTimeTo);
-      var updatedPosts = await Post.fetchUpdated(dateTimeTo);
+      var updatedPosts = await Post.fetchUpdated();
       if (updatedPosts.isNotEmpty) {
         for (var updatedPost in updatedPosts) {
           await boxPosts.put(updatedPost.id, updatedPost);
         }
       }
-      await boxDateTimes.put('updatedAfter', dateTimeTo);
     });
     return true;
   }

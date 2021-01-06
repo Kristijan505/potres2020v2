@@ -19,7 +19,7 @@ class PostAdapter extends TypeAdapter<Post> {
     return Post(
       contact: fields[7] as String,
       content: fields[2] as String,
-      content2: fields[8] as String,
+      longDesc: fields[8] as String,
       id: fields[0] as int,
       lat: fields[4] as double,
       lon: fields[3] as double,
@@ -27,13 +27,18 @@ class PostAdapter extends TypeAdapter<Post> {
       tags: (fields[6] as List)?.cast<Tag>(),
       title: fields[1] as String,
       updated: fields[9] as DateTime,
+      conclusion: fields[10] as String,
+      imageId: fields[11] as String,
+      waterConnection: (fields[12] as List)?.cast<String>(),
+      electricConnection: (fields[13] as List)?.cast<String>(),
+      image2Id: fields[14] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Post obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,9 +56,19 @@ class PostAdapter extends TypeAdapter<Post> {
       ..writeByte(7)
       ..write(obj.contact)
       ..writeByte(8)
-      ..write(obj.content2)
+      ..write(obj.longDesc)
       ..writeByte(9)
-      ..write(obj.updated);
+      ..write(obj.updated)
+      ..writeByte(10)
+      ..write(obj.conclusion)
+      ..writeByte(11)
+      ..write(obj.imageId)
+      ..writeByte(12)
+      ..write(obj.waterConnection)
+      ..writeByte(13)
+      ..write(obj.electricConnection)
+      ..writeByte(14)
+      ..write(obj.image2Id);
   }
 
   @override
