@@ -27,8 +27,9 @@ class _HomePageState extends State<HomePage> {
         FutureBuilder<Box>(
           future: Hive.openBox('posts'),
           builder: (context, box) {
-            if (!(box.hasData && box.connectionState == ConnectionState.done))
+            if (!(box.hasData && box.connectionState == ConnectionState.done)) {
               return Center(child: CircularProgressIndicator());
+            }
             return GestureDetector(
               onHorizontalDragEnd: (dragEndDetails) {
                 if (dragEndDetails.primaryVelocity < 0) {
@@ -39,12 +40,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Column(
                 children: <Widget>[
-                  ...box.data.values
-                      .where((element) => element.runtimeType == Post)
-                      .skip(activePage * itemsPerPage)
-                      .take(itemsPerPage)
-                      .toList()
-                      .map((e) {
+                  ...box.data.values.where((element) => element.runtimeType == Post).skip(activePage * itemsPerPage).take(itemsPerPage).toList().map((e) {
                     return _PostItem(post: e);
                   }),
                   Row(
@@ -97,8 +93,6 @@ class _HomePageState extends State<HomePage> {
       setState(() => activePage++);
     }
   }
-  
-  
 }
 
 class _PostItem extends StatelessWidget {
@@ -124,11 +118,12 @@ class _PostItem extends StatelessWidget {
               Row(children: [
                 Container(
                   padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black26
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black26),
+                  child: Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                    size: 16,
                   ),
-                  child: Icon(Icons.phone, color: Colors.white, size: 16,),
                 ),
                 SizedBox(width: 8),
                 Expanded(
